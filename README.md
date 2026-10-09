@@ -1,54 +1,82 @@
-# CPUT Connect
+# 🎓 CPUT Lost & Found System
 
-Build a modern, responsive, and fully functional website called CPUT Lost & Found System for Cape Peninsula University of Technology students and staff.
+A web-based Lost & Found Management System developed for students and staff at the **Cape Peninsula University of Technology (CPUT)**.
 
-The website must help users report, search for, and recover lost belongings across six CPUT campuses: Bellville, District Six, Mowbray, Granger Bay, Wellington, and Athlone.
+The platform provides a centralised solution for reporting, searching, and recovering lost belongings across CPUT campuses.
 
-Design: Create a professional, student-friendly interface using navy blue, white, and gold. Include a modern homepage, attractive item cards, icons, and mobile-friendly navigation.
+## 📌 Project Overview
 
-Main Features:
+The CPUT Lost & Found System aims to solve the challenges students face when losing personal belongings on campus.
 
-Registration & Login: Students and staff can create accounts and log in securely.
+Instead of relying on WhatsApp groups, social media, or visiting campus security offices, students can report and search for lost items through one convenient online platform.
 
-Report Lost Item: Users can submit an item name, category, description, date, campus, location, and photo.
+## 🚀 Features
 
-Report Found Item: Users can upload details and photos of items they have found.
+- 🔐 **User Authentication** — Secure registration and login for students and staff.
+- 📢 **Report Lost Items** — Submit information about missing belongings.
+- 📦 **Report Found Items** — Upload details of recovered belongings.
+- 📸 **Image Upload** — Attach pictures to item reports.
+- 🔎 **Search & Filter** — Search by category, date, keyword, and campus.
+- 📍 **Multi-Campus Support** — Access reports from all five campuses.
+- 🔔 **Notifications** — Receive alerts about potential item matches.
+- 📊 **Student Dashboard** — Manage reports and track item statuses.
+- 🛡️ **Admin Dashboard** — Allow campus security to manage reports and verify claims.
+- ✅ **Item Tracking** — Track items as Active, Claimed, or Expired.
 
-Search & Filter: Search lost and found items by keyword, category, date, and campus.
+## 🏫 Supported Campuses
 
-Item Status: Track items as Active, Claimed, or Expired.
+| Campus | Location |
+|---|---|
+| Bellville | Symphony Way, Bellville |
+| District Six (Cape Town) | Hanover and Tennant Streets, Zonnebloem |
+| Granger Bay | Beach Road, Mouille Point |
+| Mowbray | Highbury Road, Mowbray |
+| Wellington | Jan van Riebeeck Street, Wellington |
 
-Student Dashboard: View submitted reports, potential matches, and notifications.
+## 💻 Technology Stack
 
-Notifications: Alert users when a found item potentially matches their lost item.
+The project is designed to use:
 
-Admin Dashboard: Campus security can manage reports, verify ownership claims, and update item statuses.
+- **Frontend:** React, TypeScript
+- **Styling:** Tailwind CSS
+- **Backend:** Supabase
+- **Database:** PostgreSQL
+- **Authentication:** Supabase Authentication
+- **Storage:** Supabase Storage
+- **Development Platform:** Lovable
 
-Claim Item: Allow students to request an item by providing private proof of own ownership.
+## 🎯 Project Objectives
 
-Colour Scheme: Must look like a CPUT website
+- Create a centralised lost and found platform for CPUT.
+- Reduce the time students spend searching for belongings.
+- Improve communication between students and campus security.
+- Make reporting lost and found items easier.
+- Increase the chances of lost belongings being returned to their rightful owners.
 
-Primary: CPUT Blue (#003B71)
+## 🔒 Security
 
-Secondary: Light Blue (#0072BC)
+The system is designed to support secure authentication, protected user information, role-based access, and ownership verification before items are claimed.
 
-Background: White (#FFFFFF)
+## 🔮 Future Improvements
 
-Light Grey (#F5F6F8) for cards and sections
+- Email notifications
+- Advanced item matching
+- QR code identification
+- Improved analytics and reporting
+- Integration with official CPUT student services
 
-Dark Grey (#333333) for text
+## 👨‍💻 Developers
 
-Include the CPUT logo in the header.
+Developed as a university group project by CPUT students.
 
-This project was built with [Lovable](https://lovable.dev).
 
-## Build with Lovable
+## 📄 Disclaimer
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/9568679b-5f9a-43b5-914b-f9e61307e9d6).
+This project is an academic prototype developed for educational purposes. It is not an official CPUT platform unless formally approved by the university.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+---
+
+**CPUT Lost & Found System — Connecting Lost Items with Their Rightful Owners.**
 
 ## Development
 
