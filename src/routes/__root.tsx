@@ -29,10 +29,24 @@ function NotFoundComponent() {
   );
 }
 
+const RELOAD_KEY = "chunk-reload-at";
+function isChunkError(e: unknown) {
+  const msg = e instanceof Error ? e.message : String(e ?? "");
+  return /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module/i.test(msg);
+}
+function reloadOnceForNewVersion() {
+  const last = Number(sessionStorage.getItem(RELOAD_KEY) || 0);
+  if (Date.now() - last < 10000) return false;
+  sessionStorage.setItem(RELOAD_KEY, String(Date.now()));
+  window.location.reload();
+  return true;
+}
+
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
+    if (isChunkError(error) && reloadOnceForNewVersion()) return;
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
   return (
@@ -88,6 +102,21 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  useEffect(() => {
+    const onPreloadError = (e: Event) => {
+      if (reloadOnceForNewVersion()) e.preventDefault();
+    };
+    const onRejection = (e: PromiseRejectionEvent) => {
+      if (isChunkError(e.reason)) reloadOnceForNewVersion();
+    };
+    window.addEventListener("vite:preloadError", onPreloadError);
+    window.addEventListener("unhandledrejection", onRejection);
+    return () => {
+      window.removeEventListener("vite:preloadError", onPreloadError);
+      window.removeEventListener("unhandledrejection", onRejection);
+    };
+  }, []);
+
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
