@@ -35,7 +35,7 @@ export function SiteHeader() {
       <div className="h-1 bg-gold" />
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4">
         <Link to="/" className="flex min-w-0 items-center gap-3">
-          <img src={logo.url} alt="CPUT logo" className="h-14 w-auto shrink-0 -my-2" />
+          <img src={logo.url} alt="CPUT logo" className="h-14 w-auto shrink-0" />
           <div className="hidden border-l pl-3 sm:block">
             <p className="font-display text-sm font-bold leading-tight text-primary">Lost &amp; Found</p>
             <p className="text-xs text-muted-foreground">Campus Security Services</p>
@@ -82,7 +82,7 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 bg-primary text-primary-foreground">
+    <footer className="bg-primary text-primary-foreground">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-3">
         <div>
           <p className="font-display text-lg font-bold">CPUT Lost &amp; Found</p>
