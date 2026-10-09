@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, isStaff } = useAuth();
   const [open, setOpen] = useState(false);
   const [unread, setUnread] = useState(0);
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export function SiteHeader() {
     { to: "/items", label: "Browse Items" },
     { to: "/report", label: "Report Item" },
     ...(user ? [{ to: "/dashboard", label: "My Dashboard" }, { to: "/messages", label: "Messages" }] : []),
-    ...(isAdmin ? [{ to: "/admin", label: "Admin" }] : []),
+    ...(isStaff ? [{ to: "/admin", label: isAdmin ? "Admin" : "Campus Admin" }] : []),
   ] as const;
 
   const signOut = async () => {
