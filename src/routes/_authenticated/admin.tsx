@@ -134,7 +134,6 @@ function Admin() {
               </tbody>
             </table>
             {!items.length && <p className="p-6 text-center text-muted-foreground">No reports.</p>}
-            <StatusBadge status="" />
           </div>
         </TabsContent>
       </Tabs>
