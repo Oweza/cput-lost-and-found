@@ -68,7 +68,12 @@ The system is designed to support secure authentication, protected user informat
 ## 👨‍💻 Developers
 
 Developed as a university group project by CPUT students.
-
+Owenkosi Nxasana 
+Simphiwe Nkosi
+Pertunia Sifunda
+Nomhle Njengele
+Thandeka Malande
+Entle Myezo
 
 ## 📄 Disclaimer
 
