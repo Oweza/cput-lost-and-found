@@ -72,7 +72,7 @@ function Messages() {
   const send = async () => {
     if (!active || !body.trim()) return;
     const { error } = await supabase.from("messages").insert({ item_id: active.item, sender_id: uid!, recipient_id: active.other, body: body.trim().slice(0, 2000) });
-    if (error) return toast.error("Message could not be sent.");
+    if (error) { toast.error("Message could not be sent."); return; }
     setBody("");
     qc.invalidateQueries({ queryKey: ["messages"] });
   };
