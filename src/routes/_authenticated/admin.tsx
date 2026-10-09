@@ -53,13 +53,13 @@ function Admin() {
 
   const setStatus = async (id: string, status: "active" | "claimed" | "expired") => {
     const { error } = await supabase.from("items").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Status updated");
     qc.invalidateQueries({ queryKey: ["admin"] });
   };
   const decide = async (id: string, status: "approved" | "rejected") => {
     const { error } = await supabase.from("claims").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Claim ${status}`);
     qc.invalidateQueries({ queryKey: ["admin"] });
   };

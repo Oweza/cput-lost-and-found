@@ -47,11 +47,11 @@ function ItemPage() {
   if (!item) return <p className="mx-auto max-w-5xl px-4 py-10">Item not found.</p>;
 
   const submitClaim = async () => {
-    if (proof.trim().length < 10) return toast.error("Please describe your proof of ownership (at least 10 characters).");
+    if (proof.trim().length < 10) { toast.error("Please describe your proof of ownership (at least 10 characters)."); return; }
     setBusy(true);
     const { error } = await supabase.from("claims").insert({ item_id: id, claimant_id: user!.id, proof: proof.trim().slice(0, 2000), contact: contact.trim().slice(0, 100) });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Claim submitted. Campus security will review it.");
     qc.invalidateQueries({ queryKey: ["myclaim", id] });
   };

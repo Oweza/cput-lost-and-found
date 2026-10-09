@@ -34,23 +34,23 @@ function AuthPage() {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const parsed = schema.safeParse({ email: f.get("email"), password: f.get("password") });
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
     setBusy(true);
     if (mode === "in") {
       const { error } = await supabase.auth.signInWithPassword(parsed.data);
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       navigate({ to: "/dashboard" });
     } else {
       const full_name = String(f.get("full_name") ?? "").trim().slice(0, 100);
       const student_number = String(f.get("student_number") ?? "").trim().slice(0, 20);
-      if (!full_name) { setBusy(false); return toast.error("Enter your full name"); }
+      if (!full_name) { setBusy(false); { toast.error("Enter your full name"); return; } }
       const { error } = await supabase.auth.signUp({
         ...parsed.data,
         options: { emailRedirectTo: window.location.origin, data: { full_name, student_number } },
       });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success("Check your email to confirm your account.");
       setMode("in");
     }
@@ -58,7 +58,7 @@ function AuthPage() {
 
   const google = async () => {
     const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (r.error) return toast.error("Google sign-in failed");
+    if (r.error) { toast.error("Google sign-in failed"); return; }
     if (!r.redirected) navigate({ to: "/dashboard" });
   };
 

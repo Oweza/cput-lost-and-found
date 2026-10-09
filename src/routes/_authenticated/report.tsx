@@ -43,9 +43,9 @@ function Report() {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const parsed = schema.safeParse(Object.fromEntries(f));
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
     const file = f.get("photo") as File | null;
-    if (file && file.size > 5 * 1024 * 1024) return toast.error("Photo must be under 5MB");
+    if (file && file.size > 5 * 1024 * 1024) { toast.error("Photo must be under 5MB"); return; }
     setBusy(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
