@@ -65,18 +65,18 @@ function Admin() {
 
   const setStatus = async (id: string, status: "active" | "claimed" | "expired") => {
     const { error } = await supabase.from("items").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Status updated"); refresh();
   };
   const decide = async (id: string, status: "approved" | "rejected") => {
     const { error } = await supabase.from("claims").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Claim ${status}`); refresh();
   };
   const remove = async (id: string) => {
     if (!confirm("Delete this report?")) return;
     const { error } = await supabase.from("items").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     refresh();
   };
 
@@ -210,7 +210,7 @@ function StatsPanel({ items, claims, campuses }: { items: AnyItem[]; claims: { s
   );
 }
 
-function UsersPanel({ selfId }: { selfId?: string }) {
+function UsersPanel({ selfId }: { selfId?: string | undefined }) {
   const qc = useQueryClient();
   const [q, setQ] = useState("");
   const [pick, setPick] = useState<Record<string, string>>({});
@@ -227,7 +227,7 @@ function UsersPanel({ selfId }: { selfId?: string }) {
   });
   const refresh = () => qc.invalidateQueries({ queryKey: ["admin-users"] });
   const run = async (p: PromiseLike<{ error: { message: string } | null }>, ok: string) => {
-    const { error } = await p; if (error) return toast.error(error.message); toast.success(ok); refresh();
+    const { error } = await p; if (error) { toast.error(error.message); return; } toast.success(ok); refresh();
   };
   const list = (data?.profiles ?? []).filter((p) => !q || `${p.full_name} ${p.student_number ?? ""}`.toLowerCase().includes(q.toLowerCase()));
   return (
@@ -260,7 +260,7 @@ function UsersPanel({ selfId }: { selfId?: string }) {
                       <select className="h-8 rounded border border-input bg-background px-2" value={pick[p.id] ?? ""} onChange={(e) => setPick({ ...pick, [p.id]: e.target.value })}>
                         <option value="">Assign campus…</option>{CAMPUSES.filter((c) => !mine.some((m) => m.campus === c)).map((c) => <option key={c}>{c}</option>)}
                       </select>
-                      <Button size="sm" variant="outline" disabled={!pick[p.id]} onClick={() => { run(supabase.from("campus_admins").insert({ user_id: p.id, campus: pick[p.id] }), "Campus assigned"); setPick({ ...pick, [p.id]: "" }); }}>Add</Button>
+                      <Button size="sm" variant="outline" disabled={!pick[p.id]} onClick={() => { run(supabase.from("campus_admins").insert({ user_id: p.id, campus: pick[p.id]! }), "Campus assigned"); setPick({ ...pick, [p.id]: "" }); }}>Add</Button>
                     </div>
                   </td>
                 </tr>
@@ -288,7 +288,7 @@ function DisputesPanel() {
   });
   const resolve = async (id: string, status: "resolved" | "dismissed") => {
     const { error } = await supabase.from("disputes").update({ status, resolution: (notes[id] ?? "").trim().slice(0, 1000), resolved_at: new Date().toISOString() }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Dispute ${status}`); qc.invalidateQueries({ queryKey: ["admin-disputes"] });
   };
   if (!data?.disputes.length) return <Empty text="No disputes have been raised." />;
@@ -328,9 +328,9 @@ function SettingsPanel() {
   const [email, setEmail] = useState("");
   useEffect(() => { if (data) { setDays(data.expiry_days); setMsg(data.messaging_enabled); setEmail(data.support_email); } }, [data]);
   const save = async () => {
-    if (days < 1 || days > 365) return toast.error("Archive period must be 1–365 days.");
+    if (days < 1 || days > 365) { toast.error("Archive period must be 1–365 days."); return; }
     const { error } = await supabase.from("app_settings").upsert({ id: 1, expiry_days: days, messaging_enabled: msg, support_email: email.trim().slice(0, 255), updated_at: new Date().toISOString() });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Settings saved"); refetch();
   };
   return (
