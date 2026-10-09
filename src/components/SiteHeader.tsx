@@ -21,7 +21,7 @@ export function SiteHeader() {
   const links = [
     { to: "/items", label: "Browse Items" },
     { to: "/report", label: "Report Item" },
-    ...(user ? [{ to: "/dashboard", label: "My Dashboard" }] : []),
+    ...(user ? [{ to: "/dashboard", label: "My Dashboard" }, { to: "/messages", label: "Messages" }] : []),
     ...(isAdmin ? [{ to: "/admin", label: "Admin" }] : []),
   ] as const;
 
