@@ -22,6 +22,13 @@
       "when": 1791571389315,
       "tag": "0002_campus_admins_disputes_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791579733976,
+      "tag": "0003_add_profile_relationships",
+      "breakpoints": true
     }
   ]
 }

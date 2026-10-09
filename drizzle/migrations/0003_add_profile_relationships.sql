@@ -1,0 +1,10 @@
+ALTER TABLE public.items ADD CONSTRAINT items_user_id_profiles_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE NOT VALID;
+ALTER TABLE public.claims ADD CONSTRAINT claims_claimant_id_profiles_fkey FOREIGN KEY (claimant_id) REFERENCES public.profiles(id) ON DELETE CASCADE NOT VALID;
+ALTER TABLE public.notifications ADD CONSTRAINT notifications_user_id_profiles_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE NOT VALID;
+ALTER TABLE public.messages ADD CONSTRAINT messages_sender_profiles_fkey FOREIGN KEY (sender_id) REFERENCES public.profiles(id) ON DELETE CASCADE NOT VALID;
+ALTER TABLE public.messages ADD CONSTRAINT messages_recipient_profiles_fkey FOREIGN KEY (recipient_id) REFERENCES public.profiles(id) ON DELETE CASCADE NOT VALID;
+ALTER TABLE public.disputes ADD CONSTRAINT disputes_raised_by_profiles_fkey FOREIGN KEY (raised_by) REFERENCES public.profiles(id) ON DELETE CASCADE NOT VALID;
+CREATE INDEX IF NOT EXISTS items_user_id_idx ON public.items(user_id);
+CREATE INDEX IF NOT EXISTS items_status_campus_idx ON public.items(status, campus, category);
+CREATE INDEX IF NOT EXISTS claims_item_id_idx ON public.claims(item_id);
+CREATE INDEX IF NOT EXISTS notifications_user_id_idx ON public.notifications(user_id, read);
