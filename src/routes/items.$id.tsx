@@ -72,6 +72,12 @@ function ItemPage() {
           <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-secondary" />{item.type === "lost" ? "Lost on" : "Found on"} {format(new Date(item.item_date), "d MMMM yyyy")}</p>
         </div>
         {item.description && <p className="mt-5 whitespace-pre-line leading-relaxed">{item.description}</p>}
+        {item.status === "expired" && <p className="mt-5 rounded-xl bg-surface p-4 text-sm text-muted-foreground">This report was archived automatically after 30 days without being claimed.</p>}
+        {user && !isOwner && item.status === "active" && (
+          <Button asChild variant="outline" className="mt-5">
+            <Link to="/messages" search={{ item: item.id, with: item.user_id }}>Message reporter</Link>
+          </Button>
+        )}
 
         {item.type === "found" && item.status === "active" && !isOwner && (
           <div className="mt-8 rounded-xl border bg-surface p-5">
