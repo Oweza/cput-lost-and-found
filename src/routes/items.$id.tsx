@@ -38,6 +38,10 @@ function ItemPage() {
     enabled: !!user,
     queryFn: async () => (await supabase.from("claims").select("*").eq("item_id", id).eq("claimant_id", user!.id).maybeSingle()).data,
   });
+  const { data: settings } = useQuery({
+    queryKey: ["settings"],
+    queryFn: async () => (await supabase.from("app_settings").select("*").eq("id", 1).maybeSingle()).data,
+  });
   const url = usePhotoUrl(item?.photo_url);
   const [proof, setProof] = useState("");
   const [contact, setContact] = useState("");
@@ -73,7 +77,7 @@ function ItemPage() {
         </div>
         {item.description && <p className="mt-5 whitespace-pre-line leading-relaxed">{item.description}</p>}
         {item.status === "expired" && <p className="mt-5 rounded-xl bg-surface p-4 text-sm text-muted-foreground">This report was archived automatically after 30 days without being claimed.</p>}
-        {user && !isOwner && item.status === "active" && (
+        {user && !isOwner && item.status === "active" && settings?.messaging_enabled !== false && (
           <Button asChild variant="outline" className="mt-5">
             <Link to="/messages" search={{ item: item.id, with: item.user_id }}>Message reporter</Link>
           </Button>

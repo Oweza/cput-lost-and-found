@@ -15,6 +15,13 @@
       "when": 1791569890261,
       "tag": "0001_expiry_and_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791571389315,
+      "tag": "0002_campus_admins_disputes_settings",
+      "breakpoints": true
     }
   ]
 }

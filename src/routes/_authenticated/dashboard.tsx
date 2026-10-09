@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { Bell, CheckCheck } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ItemCard } from "@/components/ItemCard";
 import { StatusBadge } from "@/components/Badges";
@@ -50,6 +51,16 @@ function Dashboard() {
     qc.invalidateQueries({ queryKey: ["dashboard"] });
   };
 
+  const raiseDispute = async (itemId: string, claimId: string) => {
+    const reason = prompt("Explain why you are disputing this decision (at least 10 characters):")?.trim();
+    if (!reason) return;
+    if (reason.length < 10) { toast.error("Please give more detail (at least 10 characters)."); return; }
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from("disputes").insert({ item_id: itemId, claim_id: claimId, raised_by: user!.id, reason: reason.slice(0, 2000) });
+    if (error) { toast.error(error.message); return; }
+    toast.success("Dispute sent to campus security.");
+  };
+
   const unread = data?.notes.filter((n) => !n.read).length ?? 0;
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
@@ -87,9 +98,14 @@ function Dashboard() {
           {data?.claims.length ? (
             <ul className="mt-4 divide-y rounded-xl border">
               {data.claims.map((c) => (
-                <li key={c.id} className="flex items-center justify-between gap-3 p-4">
-                  <Link to="/items/$id" params={{ id: c.item_id }} className="min-w-0 truncate font-semibold text-primary hover:underline">{(c as { items?: { title: string } }).items?.title ?? "Item"}</Link>
-                  <StatusBadge status={c.status} />
+                <li key={c.id} className="p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <Link to="/items/$id" params={{ id: c.item_id }} className="min-w-0 truncate font-semibold text-primary hover:underline">{(c as { items?: { title: string } }).items?.title ?? "Item"}</Link>
+                    <div className="flex items-center gap-2">
+                      <StatusBadge status={c.status} />
+                      {c.status !== "pending" && <Button size="sm" variant="ghost" onClick={() => raiseDispute(c.item_id, c.id)}>Dispute</Button>}
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>

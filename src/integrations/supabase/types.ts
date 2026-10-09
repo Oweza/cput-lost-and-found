@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_settings: {
+        Row: {
+          expiry_days: number
+          id: number
+          messaging_enabled: boolean
+          support_email: string
+          updated_at: string
+        }
+        Insert: {
+          expiry_days?: number
+          id?: number
+          messaging_enabled?: boolean
+          support_email?: string
+          updated_at?: string
+        }
+        Update: {
+          expiry_days?: number
+          id?: number
+          messaging_enabled?: boolean
+          support_email?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      campus_admins: {
+        Row: {
+          campus: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          campus: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          campus?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       claims: {
         Row: {
           claimant_id: string
@@ -45,6 +90,57 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "claims_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      disputes: {
+        Row: {
+          claim_id: string | null
+          created_at: string
+          id: string
+          item_id: string
+          raised_by: string
+          reason: string
+          resolution: string
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["dispute_status"]
+        }
+        Insert: {
+          claim_id?: string | null
+          created_at?: string
+          id?: string
+          item_id: string
+          raised_by: string
+          reason: string
+          resolution?: string
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["dispute_status"]
+        }
+        Update: {
+          claim_id?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          raised_by?: string
+          reason?: string
+          resolution?: string
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["dispute_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "disputes_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "claims"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "disputes_item_id_fkey"
             columns: ["item_id"]
             isOneToOne: false
             referencedRelation: "items"
@@ -222,10 +318,16 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_any_campus_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_campus_admin: {
+        Args: { _campus: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "user"
       claim_status: "pending" | "approved" | "rejected"
+      dispute_status: "open" | "resolved" | "dismissed"
       item_status: "active" | "claimed" | "expired"
       item_type: "lost" | "found"
     }
@@ -357,6 +459,7 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "user"],
       claim_status: ["pending", "approved", "rejected"],
+      dispute_status: ["open", "resolved", "dismissed"],
       item_status: ["active", "claimed", "expired"],
       item_type: ["lost", "found"],
     },

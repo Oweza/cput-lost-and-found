@@ -12,4 +12,4 @@
 - Data access uses the browser Supabase client with RLS (no server functions) — all rules live in policies.
 - Item photos live in a private bucket; store the object path and render via signed URLs — public buckets are blocked by workspace policy.
 - Match notifications and claim outcomes are produced by database triggers — keeps notifications consistent regardless of client.
-- Admin access is the `admin` row in `user_roles`, checked via `has_role` — never from profile data.
+- System admin access is the `admin` row in `user_roles`; campus-scoped admins are rows in `campus_admins`, checked via `has_role` / `is_campus_admin` in RLS — never from profile data.
