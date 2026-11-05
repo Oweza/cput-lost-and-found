@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Bell, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "@/assets/cput-logo.png.asset.json";
+import logo from "@/assets/cput-logo.png";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ export function SiteHeader() {
       <div className="h-1 bg-gold" />
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4">
         <Link to="/" className="flex min-w-0 items-center gap-3">
-          <img src={logo.url} alt="CPUT logo" className="h-14 w-auto shrink-0" />
+          <img src={logo} alt="Cape Peninsula University of Technology" className="h-16 w-auto shrink-0" />
           <div className="hidden border-l pl-3 sm:block">
             <p className="font-display text-sm font-bold leading-tight text-primary">Lost &amp; Found</p>
             <p className="text-xs text-muted-foreground">Campus Security Services</p>

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,9 +56,33 @@ function AuthPage() {
   };
 
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (r.error) { toast.error("Google sign-in failed"); return; }
-    if (!r.redirected) navigate({ to: "/dashboard" });
+    setBusy(true);
+    const redirectTo = `${window.location.origin}/dashboard`;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo, skipBrowserRedirect: true },
+    });
+    if (error || !data.url) {
+      setBusy(false);
+      toast.error(error?.message ?? "Google sign-in failed");
+      return;
+    }
+    try {
+      const res = await fetch(data.url, { redirect: "manual" });
+      if (res.status >= 400) {
+        let message = "Google sign-in failed";
+        try {
+          const body = await res.json() as { msg?: string; message?: string; error_description?: string };
+          message = body.msg || body.error_description || body.message || message;
+        } catch { /* provider responded with a non-JSON error page */ }
+        setBusy(false);
+        toast.error(message === "Unsupported provider: missing OAuth secret"
+          ? "Google is enabled in Supabase, but the OAuth client secret is missing. Add your Google client ID and secret under Authentication → Providers → Google, and allow this site under URL Configuration."
+          : message);
+        return;
+      }
+    } catch { /* a real Google redirect can be opaque to fetch */ }
+    window.location.assign(data.url);
   };
 
   return (
@@ -79,7 +102,7 @@ function AuthPage() {
           <Button type="submit" className="w-full" disabled={busy}>{mode === "in" ? "Sign in" : "Register"}</Button>
         </form>
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground"><div className="h-px flex-1 bg-border" />OR<div className="h-px flex-1 bg-border" /></div>
-        <Button variant="outline" className="w-full" onClick={google}>Continue with Google</Button>
+        <Button type="button" variant="outline" className="w-full" onClick={google} disabled={busy}>Continue with Google</Button>
         <p className="mt-6 text-center text-sm">
           {mode === "in" ? "New here? " : "Already registered? "}
           <button className="font-semibold text-secondary hover:underline" onClick={() => setMode(mode === "in" ? "up" : "in")}>
