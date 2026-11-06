@@ -43,7 +43,6 @@ The project is designed to use:
 - **Database:** PostgreSQL
 - **Authentication:** Supabase Authentication
 - **Storage:** Supabase Storage
-- **Development Platform:** Lovable
 
 ## 🎯 Project Objectives
 
